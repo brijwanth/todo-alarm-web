@@ -17,6 +17,7 @@ textarea { resize:vertical; }
 .shell { display:grid; grid-template-columns:200px minmax(0,1fr) 380px; height:100vh; }
 nav { display:flex; flex-direction:column; gap:6px; padding:16px 12px; border-right:1px solid var(--line); background:var(--card); }
 nav .brand { font-weight:700; margin-bottom:10px; }
+#notify { white-space:normal; text-align:left; }
 nav button[data-view] { text-align:left; border-color:transparent; }
 nav button.active { background:var(--bg); border-color:var(--line); font-weight:600; }
 main { overflow:auto; padding:20px 28px 80px; }
@@ -48,7 +49,7 @@ dialog::backdrop { background:rgba(0,0,0,.35); }
 .dlg label { display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--muted); }
 .dlg label.check { flex-direction:row; color:var(--text); }
 .dlg-actions { display:flex; gap:8px; align-items:center; }
-#toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#24292f; color:#fff; padding:10px 16px; border-radius:10px; }
+#toast { max-width:min(560px,92vw); text-align:center; z-index:20; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#24292f; color:#fff; padding:10px 16px; border-radius:10px; }
 @media (max-width: 900px) {
   .shell { grid-template-columns:1fr; grid-template-rows:auto 1fr; }
   nav { flex-direction:row; flex-wrap:wrap; border-right:0; border-bottom:1px solid var(--line); }

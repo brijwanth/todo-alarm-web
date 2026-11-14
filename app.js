@@ -340,7 +340,7 @@ document.addEventListener("click", e => {
   else if (b.dataset.editAlarm) openAlarmEditor(selectedId, b.dataset.editAlarm);
   else if (b.id === "signin") signInWithPopup(auth, new GoogleAuthProvider()).catch(err => toast("Sign-in failed: " + err.message));
   else if (b.id === "signout") signOut(auth);
-  else if (b.id === "notify") Notification.requestPermission().then(updateNotifyBtn);
+  else if (b.id === "notify") onNotifyClick();
 });
 
 document.addEventListener("submit", e => {
@@ -385,9 +385,32 @@ document.addEventListener("input", e => {
 
 function updateNotifyBtn() {
   const b = $("#notify");
-  if (!("Notification" in window)) { b.hidden = true; return; }
-  b.textContent = Notification.permission === "granted" ? "🔔 Laptop reminders on" : "🔕 Turn on laptop reminders";
-  b.disabled = Notification.permission === "granted";
+  if (!("Notification" in window)) { b.textContent = "Reminders not supported in this browser"; b.disabled = true; return; }
+  b.disabled = false;
+  b.textContent = Notification.permission === "granted" ? "🔔 Reminders on (send test)"
+    : Notification.permission === "denied" ? "🔕 Reminders blocked — how to fix"
+    : "🔕 Turn on laptop reminders";
+}
+
+function testNotification() {
+  try {
+    const n = new Notification("Todo Alarm", { body: "Laptop reminders are working ✅", tag: "test" });
+    setTimeout(() => n.close(), 8000);
+    toast("Test sent. No pop-up? Check Windows Settings → System → Notifications → Google Chrome is On, and Do Not Disturb is off.");
+  } catch (e) { toast("Couldn't show a notification: " + e.message); }
+}
+
+async function onNotifyClick() {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "granted") return testNotification();
+  if (Notification.permission === "denied") {
+    return toast("Chrome is blocking notifications for this page. Click the icon at the left of the address bar → Site settings → Notifications → Allow, then reload the page.");
+  }
+  const result = await Notification.requestPermission();
+  updateNotifyBtn();
+  if (result === "granted") testNotification();
+  else if (result === "default") toast("No prompt? Look for a bell icon at the right end of the address bar and click Allow.");
+  else toast("Notifications were blocked. To undo: address bar icon → Site settings → Notifications → Allow.");
 }
 
 function checkDue() {
@@ -411,7 +434,7 @@ setInterval(() => { if (view !== "tasks" || !document.activeElement?.matches("in
 
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.hidden = false;
-  clearTimeout(t._h); t._h = setTimeout(() => (t.hidden = true), 4000);
+  clearTimeout(t._h); t._h = setTimeout(() => (t.hidden = true), Math.max(4000, msg.length * 70));
 }
 
 onAuthStateChanged(auth, u => {
