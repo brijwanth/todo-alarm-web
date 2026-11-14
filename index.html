@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Todo Alarm</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="login" class="login">
+    <img src="icon-192.png" alt="" width="72" height="72">
+    <h1>Todo Alarm</h1>
+    <p>Your tasks and alarms, synced with your phone.</p>
+    <button id="signin" class="primary">Sign in with Google</button>
+    <p class="muted">Use the same Google account as on the phone.</p>
+  </section>
+
+  <div id="appShell" class="shell" hidden>
+    <nav>
+      <div class="brand">⏰ Todo Alarm</div>
+      <button data-view="today">Today</button>
+      <button data-view="upcoming">Upcoming</button>
+      <button data-view="tasks">Tasks</button>
+      <button data-view="trash">Trash</button>
+      <div class="grow"></div>
+      <button id="notify" class="small"></button>
+      <div class="muted small"><span id="syncState">…</span><br><span id="who"></span></div>
+      <button id="signout" class="small">Sign out</button>
+    </nav>
+    <main id="main"></main>
+    <aside id="detail"></aside>
+  </div>
+
+  <dialog id="alarmDlg"></dialog>
+  <div id="toast" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
